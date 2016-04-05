@@ -164,7 +164,7 @@ public class Main extends AppCompatActivity {
 
     private String calcGross(String base, String taxSum) {
         Currency curr = Currency.getInstance(Locale.getDefault());
-        return CurrOps.add(curr,base,taxSum);
+        return CurrOps.add(curr, base, taxSum);
     }
 
     private String calcGrossN(String taxRate) {
@@ -175,17 +175,19 @@ public class Main extends AppCompatActivity {
                 на -1 и округлить до копеек в ближайшую сторону. Если вы делаете это
                 на калькуляторе, то последние два действия легко выполнить в уме.*/
 
-        //return tax (BASE*100)/100+18
+        //return tax (BASE)/1.18
         EditText etBase = (EditText) findViewById(R.id.etBase);
         Currency curr = Currency.getInstance(Locale.getDefault());
-        String top = CurrOps.mult(curr, etBase.getText().toString(), taxRate);
-        String bottom = CurrOps.add(curr, "100", taxRate);
+        String top = etBase.getText().toString();
+        String tax100 = CurrOps.add(curr, "100", taxRate);
+        String bottom = CurrOps.div(curr, tax100, "100");
         String base = CurrOps.div(curr, top, bottom);
-        return CurrOps.sub(curr,etBase.getText().toString(),base);
+        return CurrOps.sub(curr, etBase.getText().toString(), base);
     }
 
     private String calcTax(String base, String tax) {
         Currency curr = Currency.getInstance(Locale.getDefault());
+        tax = CurrOps.div(curr,tax,"100");
         return CurrOps.mult(curr, base, tax);
     }
 
