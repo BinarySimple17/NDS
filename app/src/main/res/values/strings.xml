@@ -2,8 +2,8 @@
     <string name="app_name">НДС</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
 
-    <string name="summ_net">Введена сумма без налога</string>
-    <string name="summ_gross">Введена общая сумма</string>
+    <string name="summ_net">Выделить НДС</string>
+    <string name="summ_gross">Начислить НДС</string>
 
     <string name="tax_rate">Ставка налога</string>
     <string name="usual13">18%</string>
@@ -11,8 +11,8 @@
     <string name="other_rate">Другая ставка</string>
 
     <string name="btn_calc">Рассчитать</string>
-    <string name="res_sem_net">Сумма без налога</string>
-    <string name="res_sum_tax">Сумма налога к уплате</string>
-    <string name="res_all">Общая сумма</string>
+    <string name="res_sem_net">Сумма</string>
+    <string name="res_sum_tax">Сумма налога</string>
+    <string name="res_all">Общая сумма с налогом</string>
     <string name="zero">0.00</string>
 </resources>

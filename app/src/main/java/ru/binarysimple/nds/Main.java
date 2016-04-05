@@ -115,20 +115,27 @@ public class Main extends AppCompatActivity {
         switch (rgBase.getCheckedRadioButtonId()) {
             case -1:
                 break;
-            case R.id.rbSumNet:
-                String base = calcGrossN(taxRate); //return tax
-                String tax = calcTaxNet(base); //return full sum, then fill taxes.
-                tvGross.setText(base);
-                tvTax.setText(tax);
-                tvNet.setText(convertC(etBase.getText().toString()));
+            case R.id.rbSumNet: //сумма с вычетом налога
+/*                Если у Вас под рукой не окажется интернета и надо будет выделить
+                НДС - запомните этот простой алгоритм. Чтобы выделить НДС из суммы,
+                    нужно разделить сумму на 1+НДС (т.е. если НДС 18%, то разделить
+                    нужно на 1.18), вычесть из полученного исходную сумму, умножить
+                на -1 и округлить до копеек в ближайшую сторону. Если вы делаете это
+                на калькуляторе, то последние два действия легко выполнить в уме.*/
+
+                String taxSumN = calcGrossN(taxRate); //return tax (BASE*100)/100+18
+                //String tax = calcTaxNet(base); //return full sum, then fill taxes.
+                tvGross.setText(convertC(etBase.getText().toString()));//общая сумма с налогом
+                tvTax.setText(taxSumN);//сумма налога
+                tvNet.setText(calcBaseNet(taxSumN));//сумма (база)
 
                 break;
-            case R.id.rbsumGross:
-                String taxG = calcTax(etBase.getText().toString(), taxRate);
-                String give = calcGross(taxRate);
-                tvGross.setText(convertC(etBase.getText().toString()));
-                tvTax.setText(taxG);
-                tvNet.setText(give);
+            case R.id.rbsumGross: //введена общая сумма
+                String taxSumG = calcTax(etBase.getText().toString(), taxRate); //сумма налога √
+                String give = calcGross(etBase.getText().toString(),taxSumG); //общая сумма с налогом
+                tvGross.setText(give); //общая сумма с налогом
+                tvTax.setText(taxSumG); //сумма налога
+                tvNet.setText(convertC(etBase.getText().toString())); //сумма (база)
                 break;
             default:
                 break;
@@ -144,10 +151,10 @@ public class Main extends AppCompatActivity {
         tvNet.setText(getResources().getText(R.string.zero));
     }
 
-    private String calcTaxNet(String base) {
+    private String calcBaseNet(String taxSum) {
         EditText etBase = (EditText) findViewById(R.id.etBase);
         Currency curr = Currency.getInstance(Locale.getDefault());
-        return CurrOps.sub(curr, base, etBase.getText().toString());
+        return CurrOps.sub(curr,etBase.getText().toString(),taxSum);
     }
 
     private String convertC(String base) {
@@ -155,18 +162,26 @@ public class Main extends AppCompatActivity {
         return CurrOps.convertToCurr(curr, base);
     }
 
-    private String calcGross(String tax) {
-        EditText etBase = (EditText) findViewById(R.id.etBase);
+    private String calcGross(String base, String taxSum) {
         Currency curr = Currency.getInstance(Locale.getDefault());
-        return CurrOps.mult(curr, etBase.getText().toString(), CurrOps.sub(curr, "100", tax));
+        return CurrOps.add(curr,base,taxSum);
     }
 
-    private String calcGrossN(String tax) {
+    private String calcGrossN(String taxRate) {
+        /*                Если у Вас под рукой не окажется интернета и надо будет выделить
+                НДС - запомните этот простой алгоритм. Чтобы выделить НДС из суммы,
+                    нужно разделить сумму на 1+НДС (т.е. если НДС 18%, то разделить
+                    нужно на 1.18), вычесть из полученного исходную сумму, умножить
+                на -1 и округлить до копеек в ближайшую сторону. Если вы делаете это
+                на калькуляторе, то последние два действия легко выполнить в уме.*/
 
+        //return tax (BASE*100)/100+18
         EditText etBase = (EditText) findViewById(R.id.etBase);
         Currency curr = Currency.getInstance(Locale.getDefault());
-        tax = CurrOps.sub(curr, "100", tax);
-        return CurrOps.div(curr, etBase.getText().toString(), tax);
+        String top = CurrOps.mult(curr, etBase.getText().toString(), taxRate);
+        String bottom = CurrOps.add(curr, "100", taxRate);
+        String base = CurrOps.div(curr, top, bottom);
+        return CurrOps.sub(curr,etBase.getText().toString(),base);
     }
 
     private String calcTax(String base, String tax) {
