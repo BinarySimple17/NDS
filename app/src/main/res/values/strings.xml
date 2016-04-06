@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">НДС</string>
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="app_name">Расчет НДС</string>
+    <!--<string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>-->
+    <string name="banner_ad_unit_id">ca-app-pub-9077835132655402/9391221170</string>
 
     <string name="summ_net">Выделить НДС</string>
     <string name="summ_gross">Начислить НДС</string>

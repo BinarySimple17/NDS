@@ -20,7 +20,7 @@ class CurrOps {
 
     public static String convertToCurr(Currency curr, String num) {
         BigDecimal d1 = new BigDecimal(num);
-        return format("%.2f", d1);//mult(curr, num, "1");
+        return String.format(Locale.ENGLISH,"%.2f", d1);//mult(curr, num, "1");
     }
 
     public static String mult(Currency curr, String num, String denom) {
